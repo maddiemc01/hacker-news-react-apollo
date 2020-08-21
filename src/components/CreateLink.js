@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
+import { FEED_QUERY } from './LinkList'
+
+
 class CreateLink extends Component {
   state = {
     description: '',
@@ -44,14 +47,17 @@ class CreateLink extends Component {
       <Mutation
         mutation={POST_MUTATION}
         variables={{ description, url }}
-        onCompleted={() => this.props.history.push('/')}>
+        onCompleted={() => this.props.history.push('/')}
+        update={(store, { data: { post } }) => {
+          const data = store.readQuery({ query: FEED_QUERY })
+          data.feed.links.unshift(post)
+          store.writeQuery({
+            query: FEED_QUERY,
+            data
+          })
+        }}
+        >
         {/* After the mutation was performed, react-router-dom will now navigate back to the LinkList component that’s accessible on the root route: /. */}
-        {/* {() => (
-          <button onClick={`... you'll implement this 🔜`}>
-            Submit
-          </button>
-      wrap the button element as render prop function result with <Mutation /> component passing POST_MUTATION as prop.
-        )} */}
         {postMutation => <button onClick={postMutation}>Submit</button>}
       </Mutation>
       </div>
