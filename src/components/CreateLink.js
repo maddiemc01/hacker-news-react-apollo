@@ -45,6 +45,7 @@ class CreateLink extends Component {
         mutation={POST_MUTATION}
         variables={{ description, url }}
         onCompleted={() => this.props.history.push('/')}>
+        {/* After the mutation was performed, react-router-dom will now navigate back to the LinkList component that’s accessible on the root route: /. */}
         {/* {() => (
           <button onClick={`... you'll implement this 🔜`}>
             Submit
